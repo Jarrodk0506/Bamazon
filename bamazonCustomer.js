@@ -45,8 +45,11 @@ var choice = function(){
             for(var i = 0; i < res.length; i++){
                 if(answers.Choice == res[i].item_id){
                     console.log("\nYou chose: " + res[i].product_name + "." +
-                    "\nPrice: " + res[i].price + "\nStock left: " + res[i].stock_quantity);
+                    "\nPrice: " + res[i].price + "\nStock left: " + res[i].stock_quantity + "\n");
+                    var item_id = res[i].item_id;
+                    var item = res[i].product_name;
                     var cost = res[i].price;
+                    var stock = res[i].stock_quantity;
                     inquirer.prompt([
                         {
                             name:"choice",
@@ -54,7 +57,14 @@ var choice = function(){
                         }
                     ]).then(function(answers){
                        cost = cost * answers.choice;
-                       console.log(cost);
+                       if(stock > answers.choice){
+                           connection.query("UPDATE products SET stock_quantity = stock_quantity -" + answers.choice + " WHERE item_id = " + item_id);
+                           console.log("The price for " + answers.choice + " " + item + "s is: $" + cost + "\nThank you come again!");
+                           connection.end();
+                       }else{
+                           console.log("Insufficient Stock");
+                           connection.end();
+                       }
                     })
                 }
             }
