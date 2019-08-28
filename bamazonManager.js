@@ -1,6 +1,8 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+
+//Connection to mysql
 var connection = mysql.createConnection({
     host: "127.0.0.1",
   
@@ -12,12 +14,14 @@ var connection = mysql.createConnection({
     database: "bamazon"
 });
 
+//Once connected run manager menu function to display the manager menu
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
     managerMenu();
 });
 
+//Show a menu to view products, view low inventory, add to inventory, add a new product, or exit and close the app.
 function managerMenu() {
     inquirer.prompt([
         {
@@ -46,6 +50,7 @@ function managerMenu() {
         });  
 }
 
+//Function to display the products for sale then go back to the menu
 function productsForSale(){
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
@@ -57,6 +62,7 @@ function productsForSale(){
       });
 }
 
+//Function to show any product with less than 5 units in stock, Then return to menu.
 function lowInventory(){
     connection.query("SELECT * FROM products", function(err, res) {
         if (err) throw err;
@@ -70,6 +76,7 @@ function lowInventory(){
 
 }
 
+//Function to add more units to a product by item ID, then return to menu.
 function addToInventory(){
     inquirer.prompt([
         {
@@ -101,6 +108,7 @@ function addToInventory(){
     });
 }
 
+//Function to add a new product to the Mysql database. Then return to menu.
 function addProduct(){
     inquirer.prompt([
         {

@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+//connection to mysql
 var connection = mysql.createConnection({
     host: "127.0.0.1",
   
@@ -13,6 +14,7 @@ var connection = mysql.createConnection({
   });
 
 
+//Start connection and Display the products
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
@@ -20,7 +22,7 @@ connection.connect(function(err) {
 });
 
 
-
+//function to display the current products for the user. Once displayed run Choice function.
 function displayProducts() {
     connection.query("SELECT * FROM products", function(err, res) {
       if (err) throw err;
@@ -32,6 +34,9 @@ function displayProducts() {
     });
   }
 
+
+//Prompt user to choose which item they would like by ID, then ask how many units of the product 
+//the user would like to purchase show the total and end connection.
 
 var choice = function(){
     inquirer.prompt([
